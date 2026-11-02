@@ -25,6 +25,13 @@ const FIRE_SMOOTH_MS = 200; // how slowly the flicker eases toward each new rand
 const POP_ATTACK_MS = 90; // how quickly a crackle swell rises
 const POP_DECAY_MS = 300; // how quickly a crackle swell fades
 
+const GLITCH_MIN_GAP_MS = 4000; // quietest stretch between glitches
+const GLITCH_MAX_GAP_MS = 9000;
+const GLITCH_HOLD_MS = 700; // how long the whole text stays as runes before resolving
+const GLITCH_STEP_MS = 110; // time per letter to resolve back
+const GLITCH_SELECTOR = "#nav .nav-label, .block-title, .group, .projects a";
+const GLYPH = /[A-Za-z0-9]/;
+
 class Skipped extends Error {}
 
 function must<T extends Element>(selector: string, root: ParentNode = document): T {
@@ -206,41 +213,68 @@ function initTimelines(): void {
   }
 }
 
-// Letters and digits resolve left to right from random characters; everything else stays put.
-function scramble(el: HTMLElement): void {
+// Shows the text as random Daedra runes for holdMs, then resolves letters left to right back to the real font.
+// Each letter sits in a fixed-width cell so swapping fonts never shifts the layout.
+async function runeCycle(el: HTMLElement, holdMs: number, stepMs: number): Promise<void> {
+  const host = el.closest<HTMLElement>("a, h1, h2, h3") ?? el;
+  host.setAttribute("aria-label", (host.textContent ?? "").trim());
+  el.dataset.scrambling = "true";
+
+  const cells: { cell: HTMLElement; ch: string }[] = [];
+  const swaps: { node: Text; inserted: ChildNode[] }[] = [];
   const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
   const nodes: Text[] = [];
   for (let n = walker.nextNode(); n; n = walker.nextNode()) nodes.push(n as Text);
-  const finals = nodes.map((n) => n.data);
-
-  const isScrambled = (ch: string) => /[A-Za-z0-9]/.test(ch);
-  const total = finals.join("").split("").filter(isScrambled).length;
-  const step = Math.min(SCRAMBLE_STEP_MS, SCRAMBLE_MAX_MS / total);
-  const start = performance.now();
-
-  const tick = () => {
-    const elapsed = performance.now() - start;
-    let index = 0;
-    let settled = true;
-    for (const [k, node] of nodes.entries()) {
-      let out = "";
-      for (const ch of finals[k]!) {
-        if (!isScrambled(ch)) {
-          out += ch;
-        } else if (elapsed >= SCRAMBLE_BASE_MS + index * step) {
-          out += ch;
-          index++;
-        } else {
-          out += SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-          settled = false;
-          index++;
-        }
+  const range = document.createRange();
+  for (const node of nodes) {
+    if (!GLYPH.test(node.data)) continue;
+    const inserted: ChildNode[] = [];
+    let word: HTMLElement | null = null; // words stay unbreakable so a wrapped heading never splits mid-word
+    for (let i = 0; i < node.data.length; i++) {
+      const ch = node.data[i]!;
+      if (ch === " ") {
+        inserted.push(document.createTextNode(" "));
+        word = null;
+        continue;
       }
-      node.data = out;
+      if (!word) {
+        word = document.createElement("span");
+        word.className = "glitch-word";
+        inserted.push(word);
+      }
+      range.setStart(node, i);
+      range.setEnd(node, i + 1);
+      const cell = document.createElement("span");
+      cell.className = "glitch-cell";
+      cell.style.width = `${range.getBoundingClientRect().width}px`;
+      cell.textContent = ch;
+      word.append(cell);
+      cells.push({ cell, ch });
     }
-    if (!settled) setTimeout(tick, SCRAMBLE_FRAME_MS);
-  };
-  tick();
+    swaps.push({ node, inserted });
+  }
+  for (const { node, inserted } of swaps) node.replaceWith(...inserted);
+
+  const step = Math.min(stepMs, SCRAMBLE_MAX_MS / cells.length);
+  const start = performance.now();
+  for (;;) {
+    const elapsed = performance.now() - start;
+    const resolved = elapsed < holdMs ? 0 : Math.floor((elapsed - holdMs) / step) + 1;
+    for (const [i, { cell, ch }] of cells.entries()) {
+      const done = i < resolved || !GLYPH.test(ch);
+      cell.textContent = done ? ch : SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]!;
+      cell.classList.toggle("rune", !done);
+    }
+    if (resolved >= cells.length) break;
+    await sleep(SCRAMBLE_FRAME_MS);
+  }
+
+  for (const { node, inserted } of swaps) {
+    inserted[0]!.before(node);
+    for (const n of inserted) n.remove();
+  }
+  host.removeAttribute("aria-label");
+  delete el.dataset.scrambling;
 }
 
 // Headings stay hidden until their section is about to show, then scramble in once.
@@ -253,7 +287,7 @@ function initScramble(sections: HTMLElement[]): void {
         observer.unobserve(entry.target);
         for (const el of entry.target.querySelectorAll<HTMLElement>(SCRAMBLE_SELECTOR)) {
           el.classList.remove("scramble-pending");
-          scramble(el);
+          void runeCycle(el, SCRAMBLE_BASE_MS, SCRAMBLE_STEP_MS);
         }
       }
     },
@@ -394,6 +428,40 @@ function initFire(): void {
   requestAnimationFrame(frame);
 }
 
+// Menu labels scramble in once the intro ends; after that, every so often, a label or heading turns back into runes.
+function initGlitch(): void {
+  if (prefersReducedMotion()) return;
+  for (const link of document.querySelectorAll<HTMLAnchorElement>("#nav nav a")) {
+    const text = [...link.childNodes].find((n): n is Text => n instanceof Text && n.data.trim() !== "");
+    if (!text) throw new Error(`Nav link has no label text: ${link.href}`);
+    const label = document.createElement("span");
+    label.className = "nav-label";
+    label.textContent = text.data.trim();
+    text.replaceWith(" ", label);
+    void runeCycle(label, SCRAMBLE_BASE_MS, SCRAMBLE_STEP_MS);
+  }
+
+  // Skips text that is off screen or still scrambling in.
+  const pickTarget = (): HTMLElement | undefined => {
+    const ready = [...document.querySelectorAll<HTMLElement>(GLITCH_SELECTOR)].filter((el) => {
+      const r = el.getBoundingClientRect();
+      const onScreen = r.width > 0 && r.bottom > 0 && r.top < window.innerHeight;
+      return onScreen && !el.classList.contains("scramble-pending") && el.dataset.scrambling === undefined;
+    });
+    return ready[Math.floor(Math.random() * ready.length)];
+  };
+
+  const schedule = () => {
+    const gap = GLITCH_MIN_GAP_MS + Math.random() * (GLITCH_MAX_GAP_MS - GLITCH_MIN_GAP_MS);
+    setTimeout(async () => {
+      const target = document.hidden ? undefined : pickTarget();
+      if (target) await runeCycle(target, GLITCH_HOLD_MS, GLITCH_STEP_MS);
+      schedule();
+    }, gap);
+  };
+  schedule();
+}
+
 // The hero is blanked up front so it can be typed once the intro overlay is gone.
 async function main(): Promise<void> {
   const h1 = must<HTMLElement>(".hero h1");
@@ -407,6 +475,7 @@ async function main(): Promise<void> {
   }
   await runIntro();
   initSections(); // after the intro so headings scramble in where they can be seen
+  initGlitch();
   initFire();
   if (animate) await typeInto(h1, text);
 }

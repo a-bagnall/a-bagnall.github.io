@@ -7,6 +7,7 @@
   --term-bright: #b8ffb8;
   --glow: 0 0 14px rgba(51, 255, 51, 0.7);
   --font-mono: "Fira Code", ui-monospace, monospace;
+  --font-heading: "IBM Plex Mono", ui-monospace, monospace;
   --font-body: "Fira Sans", system-ui, sans-serif;
   --nav-h: 5rem;
   --pad-x: clamp(1.25rem, 6vw, 6rem);
@@ -61,7 +62,8 @@ a { color: inherit; }
   z-index: 100;
   background: var(--bg);
   padding: 2rem var(--pad-x);
-  font-family: var(--font-mono);
+  font-family: "VT323", var(--font-mono);
+  font-size: 1.6rem;
   color: var(--term-green);
 }
 #intro { transition: opacity 0.5s ease; } /* keep in sync with LEAVE_MS in main.ts */
@@ -109,6 +111,32 @@ a { color: inherit; }
 .nav-index { color: var(--accent); }
 #nav nav a.active .nav-index { color: var(--accent-bright); text-shadow: var(--glow); }
 
+/* Letters-and-digits subset of Daedra by Pixel Sagas, whose licence allows web embedding but only personal, non-commercial use. */
+@font-face {
+  font-family: "Daedra";
+  src: url("../fonts/daedra.woff") format("woff");
+  font-display: block;
+}
+#nav .home {
+  margin: 0 auto 0 -0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-family: "Daedra", serif;
+  font-size: 2.6rem;
+  line-height: 1;
+  text-decoration: none;
+  color: var(--accent-bright);
+  text-shadow: 0 0 6px rgba(51, 255, 51, 0.9), 0 0 18px rgba(51, 255, 51, 0.6), 0 0 40px rgba(20, 180, 20, 0.5);
+  animation: ominous-glow 5s ease-in-out infinite;
+}
+#nav .home:hover { color: #b8ffb8; }
+/* initGlitch() in main.ts swaps each letter into a fixed-width cell while text is glitching. */
+.nav-label, .glitch-word { white-space: nowrap; }
+.glitch-cell { display: inline-block; text-align: center; line-height: 0; }
+.glitch-cell.rune { font-family: "Daedra", serif; color: var(--accent-bright); text-shadow: var(--glow); }
+@keyframes ominous-glow {
+  50% { opacity: 0.75; text-shadow: 0 0 4px rgba(51, 255, 51, 0.7), 0 0 12px rgba(51, 255, 51, 0.4), 0 0 28px rgba(20, 180, 20, 0.3); }
+}
+
 /* Dots */
 #dots {
   position: fixed;
@@ -146,16 +174,16 @@ a { color: inherit; }
 .block-body { flex: 1; padding-left: 2rem; }
 .block-title {
   margin: 0 0 1.5rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-heading);
   font-weight: 500;
   font-size: clamp(2.2rem, 5vw, 3.5rem);
   color: var(--accent-bright);
 }
-.brace { color: var(--accent); font-family: var(--font-mono); font-size: clamp(2.2rem, 5vw, 3.5rem); }
+.brace { color: var(--accent); font-family: var(--font-heading); font-size: clamp(2.2rem, 5vw, 3.5rem); }
 .brace-close { line-height: 1; }
 
 .hero { margin: auto 0; }
-.hero h1 { font-family: var(--font-mono); font-weight: 500; font-size: clamp(2.5rem, 7vw, 5rem); color: var(--accent-bright); text-shadow: var(--glow); margin: 0; }
+.hero h1 { font-family: var(--font-heading); font-weight: 500; font-size: clamp(2.5rem, 7vw, 5rem); color: var(--accent-bright); text-shadow: var(--glow); margin: 0; }
 .hero p { font-size: 1.5rem; margin: 1rem 0 0; }
 
 .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 200; padding: 0.5rem 1rem; background: var(--bg); border: 1px solid var(--accent); }
@@ -163,7 +191,7 @@ a { color: inherit; }
 
 .lead { max-width: 70ch; }
 
-.group { font-family: var(--font-mono); font-weight: 500; color: var(--accent); margin: 1.5rem 0 0.5rem; }
+.group { font-family: var(--font-heading); font-weight: 500; color: var(--accent); margin: 1.5rem 0 0.5rem; }
 .tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.75rem; }
 .tags li { border: 1px solid var(--accent); padding: 0.2rem 0.9rem; }
 
@@ -205,7 +233,7 @@ span.skill-icon { text-align: center; color: var(--accent); font-family: var(--f
   padding-left: 1.25rem;
   border-left: 2px solid var(--accent);
 }
-.projects a { color: var(--accent-bright); font-family: var(--font-mono); font-size: 1.3rem; text-decoration: none; }
+.projects a { color: var(--accent-bright); font-family: var(--font-heading); font-size: 1.3rem; text-decoration: none; }
 .projects a:hover { text-decoration: underline; }
 .projects p { grid-column: 1 / -1; margin: 0; font-size: 1rem; }
 /* The media column spans the whole screen height so the video and image can be large without making the screen taller than the window. */
@@ -232,7 +260,7 @@ span.skill-icon { text-align: center; color: var(--accent); font-family: var(--f
   text-decoration: none;
 }
 .contact a:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
-.contact-label { color: var(--accent-bright); font-family: var(--font-mono); font-size: 1.4rem; }
+.contact-label { color: var(--accent-bright); font-family: var(--font-heading); font-size: 1.4rem; }
 .contact-handle { font-size: 1.05rem; }
 .contact a:hover .contact-handle { color: var(--accent-bright); }
 
@@ -294,12 +322,27 @@ span.skill-icon { text-align: center; color: var(--accent); font-family: var(--f
 }
 
 @media (max-width: 700px) {
+  :root { --nav-h: 6.25rem; }
   html { scroll-snap-type: none; }
-  #nav { justify-content: center; font-size: 0.85rem; }
-  #nav nav { display: grid; grid-template-columns: repeat(3, auto); gap: 0.3rem 1.5rem; }
-  #nav nav a { padding: 0; border-left: 0; }
-  #dots { right: 0.6rem; }
-  .screen { padding-right: 2.5rem; }
+  #nav { font-size: 0.9rem; }
+  #nav .home { font-size: 3rem; }
+  #nav nav { display: grid; grid-template-columns: repeat(3, 1fr); flex: 1; max-width: 20rem; }
+  /* 44px minimum touch targets */
+  #nav nav a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35em;
+    min-height: 44px;
+    padding: 0 0.5rem;
+    border-left: 0;
+    border-radius: 0.25rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #nav nav a:active { background: color-mix(in srgb, var(--accent) 20%, transparent); }
+  #dots { right: 0; gap: 0; }
+  #dots button { width: 2.75rem; height: 2.75rem; -webkit-tap-highlight-color: transparent; }
+  .screen { padding-right: 3rem; }
   .block-body { padding-left: 0; }
   /* Vertical timeline: the axis runs down the left, nodes keep their proportional position along it. */
   .timeline { width: 4px; height: 32rem; margin: 4rem 0 4rem 2rem; }
@@ -336,4 +379,5 @@ span.skill-icon { text-align: center; color: var(--accent); font-family: var(--f
   html { scroll-behavior: auto; }
   .cursor::after { animation: none; }
   body:not(.intro-active) #glow, .glow-base { animation: none; }
+  #nav .home { animation: none; }
 }
