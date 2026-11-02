@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Austin Bagnall - Software Engineer</title>
+  <meta name="description" content="Portfolio of Austin Bagnall: BEng Software student and junior ML software engineer.">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Austin Bagnall - Software Engineer">
+  <meta property="og:description" content="BEng Software student and junior ML software engineer.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0f'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' font-weight='bold' fill='%2333ff33' text-anchor='middle'%3E%3E_%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&family=Fira+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="intro-active">
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="glow" aria-hidden="true"><div class="glow-base"></div><div class="glow-flicker"></div><div class="glow-crackle"></div></div>
+
+<!-- Intro script. One object per line, played in order:
+  cmd      typed after the prompt. Optional "typo": typed first, then backspaced and retyped correctly.
+  out      printed instantly
+  ok       printed instantly, highlighted
+  progress animated bar over "ms" milliseconds, with "text" as its label -->
+<div id="intro">
+  <script type="application/json" id="intro-lines">
+  [
+    { "kind": "cmd", "text": "pwd" },
+    { "kind": "out", "text": "/home/austin/Documents" },
+    { "kind": "cmd", "text": "cd portfolio" },
+    { "kind": "cmd", "text": "ls" },
+    { "kind": "out", "text": "node_modules/  public/  src/  package.json  tsconfig.json" },
+    { "kind": "cmd", "text": "npm run build", "typo": "npm run buidl" },
+    { "kind": "progress", "text": "Compiling TypeScript", "ms": 900 },
+    { "kind": "ok", "text": "Compiled 1 file, 0 errors" },
+    { "kind": "cmd", "text": "npm run serve" },
+    { "kind": "out", "text": "Serving public/ on http://localhost:8000" },
+    { "kind": "progress", "text": "Loading portfolio", "ms": 700 },
+    { "kind": "ok", "text": "Ready." }
+  ]
+  </script>
+  <div id="intro-term" aria-live="off"></div>
+  <button id="intro-skip" type="button">Skip animation</button>
+</div>
+
+<header id="nav">
+  <nav>
+    <a data-nav href="#about"><span class="nav-index"></span> About</a>
+    <a data-nav href="#skills"><span class="nav-index"></span> Skills</a>
+    <a data-nav href="#work"><span class="nav-index"></span> Work</a>
+    <a data-nav href="#projects"><span class="nav-index"></span> Projects</a>
+    <a data-nav href="#contact"><span class="nav-index"></span> Contact</a>
+    <a href="Austin_Bagnall_Resume_2026.pdf" download><span class="nav-index">=</span> Resume</a>
+  </nav>
+</header>
+
+<ol id="dots" aria-label="Sections"></ol>
+
+<!-- Content comes from github.com/a-bagnall and the start dates you gave. -->
+<main id="main">
+
+  <section class="screen" id="top" data-section data-icon="~">
+    <div class="hero">
+      <h1>Hi, I am Austin.</h1>
+      <p>BEng Software student, junior ML software engineer and NUbots team member.</p>
+    </div>
+  </section>
+
+  <section class="screen" id="about" data-section data-icon="?">
+    <h2 class="block-title">ABOUT <span class="brace">{</span></h2>
+    <div class="block-body about-body">
+      <div class="about-text">
+        <p class="lead">I am a Software Engineering student at the University of Newcastle and a junior ML software engineer at Orica Digital Solutions, where I work on computer vision for rock fragmentation detection and the synthetic data that helps train it.</p>
+        <p class="lead">Away from work I build game AI: state machines, behaviour trees and a goal-oriented action planner, plus procedurally generated levels designed to reward exploration.</p>
+        <p class="lead">Outside of work I like WoW, Dark Souls and Lord of the Rings, films (mostly comedies and action/adventure), music, cooking for others, painting D&amp;D minis, and tabletop games like D&amp;D, Werewolf and Exploding Kittens.</p>
+      </div>
+      <img class="about-photo" src="austin.webp" width="700" height="700" alt="Austin sitting on a grassy clifftop above the ocean at sunset">
+    </div>
+    <div class="brace brace-close">}</div>
+  </section>
+
+  <section class="screen" id="skills" data-section data-icon="*">
+    <h2 class="block-title">SKILLS <span class="brace">{</span></h2>
+    <div class="block-body skills-body">
+      <div class="skills-intro">
+        <p class="lead">I work mainly on AI systems and on improving algorithms, and I am comfortable working across the full stack. This is what I use.</p>
+        <blockquote class="quote">
+          <p>"Bad programmers worry about the code. Good programmers worry about data structures and their relationships."</p>
+          <footer>Linus Torvalds</footer>
+        </blockquote>
+      </div>
+      <div class="skills-panel">
+        <div class="skill-col">
+          <h3 class="group">Languages</h3>
+          <ul class="skill-list">
+            <li><img class="skill-icon" src="icons/python.svg" alt="" width="22" height="22">Python</li>
+            <li><img class="skill-icon" src="icons/cplusplus.svg" alt="" width="22" height="22">C++</li>
+            <li><img class="skill-icon" src="icons/java.svg" alt="" width="22" height="22">Java</li>
+            <li><img class="skill-icon" src="icons/kotlin.svg" alt="" width="22" height="22">Kotlin</li>
+            <li><img class="skill-icon" src="icons/godot.svg" alt="" width="22" height="22">GDScript</li>
+            <li><img class="skill-icon" src="icons/typescript.svg" alt="" width="22" height="22">TypeScript</li>
+            <li><img class="skill-icon" src="icons/javascript.svg" alt="" width="22" height="22">JavaScript</li>
+            <li><img class="skill-icon" src="icons/html5.svg" alt="" width="22" height="22">HTML</li>
+            <li><img class="skill-icon" src="icons/css3.svg" alt="" width="22" height="22">CSS</li>
+          </ul>
+        </div>
+        <div class="skill-col">
+          <h3 class="group">ML and vision</h3>
+          <ul class="skill-list">
+            <li><img class="skill-icon" src="icons/pytorch.svg" alt="" width="22" height="22">PyTorch</li>
+            <li><img class="skill-icon" src="icons/tensorflow.svg" alt="" width="22" height="22">TensorFlow</li>
+            <li><img class="skill-icon" src="icons/opencv.svg" alt="" width="22" height="22">OpenCV</li>
+            <li><span class="skill-icon" aria-hidden="true">&gt;</span>Gymnasium</li>
+          </ul>
+          <h3 class="group">Techniques</h3>
+          <ul class="skill-list">
+            <li><span class="skill-icon" aria-hidden="true">&gt;</span>Reinforcement learning</li>
+            <li><span class="skill-icon" aria-hidden="true">&gt;</span>Computer vision</li>
+            <li><span class="skill-icon" aria-hidden="true">&gt;</span>Synthetic data generation</li>
+            <li><span class="skill-icon" aria-hidden="true">&gt;</span>Game AI</li>
+            <li><span class="skill-icon" aria-hidden="true">&gt;</span>Procedural generation</li>
+          </ul>
+        </div>
+        <div class="skill-col">
+          <h3 class="group">Tools</h3>
+          <ul class="skill-list">
+            <li><img class="skill-icon" src="icons/docker.svg" alt="" width="22" height="22">Docker</li>
+            <li><img class="skill-icon" src="icons/spring.svg" alt="" width="22" height="22">Spring</li>
+            <li><img class="skill-icon" src="icons/mysql.svg" alt="" width="22" height="22">MySQL</li>
+            <li><img class="skill-icon" src="icons/blender.svg" alt="" width="22" height="22">Blender</li>
+            <li><img class="skill-icon" src="icons/godot.svg" alt="" width="22" height="22">Godot</li>
+            <li><img class="skill-icon" src="icons/unity.svg" alt="" width="22" height="22">Unity</li>
+            <li><span class="skill-icon" aria-hidden="true">&gt;</span>Pygame</li>
+            <li><span class="skill-icon" aria-hidden="true">&gt;</span>gRPC</li>
+            <li><img class="skill-icon" src="icons/android.svg" alt="" width="22" height="22">Android</li>
+            <li><img class="skill-icon" src="icons/gradle.svg" alt="" width="22" height="22">Gradle</li>
+            <li><img class="skill-icon" src="icons/wireshark.svg" alt="" width="22" height="22">Wireshark</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="brace brace-close">}</div>
+  </section>
+
+  <section class="screen" id="work" data-section data-icon="$">
+    <h2 class="block-title">WORK <span class="brace">{</span></h2>
+    <div class="block-body work-body">
+      <div class="work-roles">
+        <div>
+          <h3 class="group">Orica Digital Solutions</h3>
+          <p>Junior ML software engineer. Built an end-to-end synthetic data pipeline for training computer vision models, adapted SAHI (Slicing-Aided Hyper Inference) for rock fragmentation detection, and wrote a lightweight synthetic LiDAR system for Blender files to support a feature-matching model.</p>
+        </div>
+        <div>
+          <h3 class="group">NUbots</h3>
+          <p>Outreach and vision teams. Helped lead demonstrations for schools and universities (UNSW, Guizhou University, and the AROSE event at Newcastle Museum), and am reworking the segmentation and semantic vision detection model while developing a depth estimation model.</p>
+        </div>
+        <div>
+          <h3 class="group">Robotildas</h3>
+          <p>A new joint RoboCup team between NUbots and UNSW's rUNSWift.</p>
+        </div>
+      </div>
+      <!-- Each node shows its dates. A node with no data-end is ongoing.
+           All dates are YYYY-MM; the axis end (data-to) may be "now". -->
+      <div class="timeline" data-from="2024-07" data-to="now">
+        <span class="timeline-year timeline-year-start"></span>
+        <span class="timeline-year timeline-year-end"></span>
+        <div class="timeline-node" data-start="2024-12">
+          <span class="timeline-dot"></span>
+          <span class="timeline-label">Orica Digital Solutions</span>
+        </div>
+        <div class="timeline-node" data-start="2025-09">
+          <span class="timeline-dot"></span>
+          <span class="timeline-label">NUbots</span>
+        </div>
+        <div class="timeline-node" data-start="2026-11">
+          <span class="timeline-dot"></span>
+          <span class="timeline-label">Robotildas</span>
+        </div>
+      </div>
+    </div>
+    <div class="brace brace-close">}</div>
+  </section>
+
+  <section class="screen" id="projects" data-section data-icon="#">
+    <h2 class="block-title">PROJECTS <span class="brace">{</span></h2>
+    <div class="block-body">
+      <ul class="projects">
+        <li>
+          <a href="https://github.com/a-bagnall/mario-ml">SuperMarioAgent</a>
+          <p>Reinforcement learning agent for gym-super-mario-bros. OpenCV sprite detection feeds an epsilon-greedy policy; first completion after 17 epochs.</p>
+          <ul class="tags"><li>Python</li><li>OpenCV</li><li>Pygame</li><li>Gymnasium</li></ul>
+        </li>
+        <li>
+          <a href="https://github.com/NUbots/NUmote">NUmote</a>
+          <p>A mobile-friendly web interface for controlling a NUbots robot directly, without a running binary.</p>
+          <ul class="tags"><li>Python</li><li>JavaScript</li><li>gRPC</li></ul>
+        </li>
+        <li>
+          <a href="https://github.com/a-bagnall/GPSTracker">GPSTracker</a>
+          <p>A geofencing tracker that combines real-time location with a tilt sensor to predict danger zones. Built for Orica Hackathon #4 (2025).</p>
+          <ul class="tags"><li>Kotlin</li><li>Android</li><li>Gradle</li></ul>
+        </li>
+        <li>
+          <a href="https://github.com/a-bagnall/PSDCalc">PSDCalc</a>
+          <p>A particle size distribution calculator that uses equivalent volume boxes (EVB) to approximate synthetic rock volumes.</p>
+          <ul class="tags"><li>Python</li><li>glTF</li></ul>
+        </li>
+      </ul>
+    </div>
+    <div class="brace brace-close">}</div>
+    <div class="project-media">
+      <figure class="fig-video">
+        <video src="best_run.mp4" width="512" height="480" autoplay muted loop playsinline aria-label="The agent completing World 1-1, with sprite detection overlaid"></video>
+        <figcaption><span>SuperMarioAgent</span> best run</figcaption>
+      </figure>
+      <figure class="fig-image">
+        <img src="numote.webp" width="1170" height="540" alt="NUmote on a phone: the robot's camera feed between two joysticks, with Get Up, Wave, Stand and Walk buttons">
+        <figcaption><span>NUmote</span> on a phone</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="screen" id="contact" data-section data-icon="@">
+    <h2 class="block-title">CONTACT <span class="brace">{</span></h2>
+    <div class="block-body">
+      <p class="lead">Based in Newcastle, NSW. Find me on GitHub or LinkedIn, or download my resume.</p>
+      <ul class="contact">
+        <li><a href="https://github.com/a-bagnall"><span class="contact-label">GitHub</span><span class="contact-handle">github.com/a-bagnall</span></a></li>
+        <li><a href="https://www.linkedin.com/in/austin-bagnall/"><span class="contact-label">LinkedIn</span><span class="contact-handle">linkedin.com/in/austin-bagnall</span></a></li>
+        <li><a href="Austin_Bagnall_Resume_2026.pdf" download><span class="contact-label">Resume</span><span class="contact-handle">Download PDF</span></a></li>
+      </ul>
+    </div>
+    <div class="brace brace-close">}</div>
+  </section>
+
+</main>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

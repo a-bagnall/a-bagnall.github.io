@@ -1,0 +1,13 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "serve": "python3 -m http.server 8000 --directory public"
+  },
+  "devDependencies": {
+    "typescript": "5.6.3"
+  }
+}
