@@ -1,0 +1,7 @@
+The woff2 files in this folder (Fira Code, Fira Sans, IBM Plex Mono, VT323) are Latin
+subsets downloaded from Google Fonts. Each is released under the SIL Open Font License,
+Version 1.1 (https://openfontlicense.org); the copyright holders are listed on each
+font's Google Fonts page.
+
+daedra.woff is a separate font with its own terms; see the comment above its @font-face
+rule in css/style.css.

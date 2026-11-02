@@ -11,6 +11,7 @@ const BACKSPACE_DELAY_MS = 55;
 const LINE_DELAY_MS = 200;
 const BAR_WIDTH = 24;
 const LEAVE_MS = 500; // keep in sync with the #intro opacity transition in style.css
+const INTRO_SEEN_KEY = "intro-seen"; // also read by the inline script in index.html's head
 const COPY_FEEDBACK_MS = 1500; // how long a copy button shows its confirmation
 const CLOCK_TICK_MS = 15000;
 const CARD_START_BELOW_PCT = 33; // timeline cards for nodes before this point on the axis start at the node
@@ -91,10 +92,10 @@ async function runIntro(): Promise<void> {
   const finish = () => {
     intro.classList.add("done");
     document.body.classList.remove("intro-active");
+    sessionStorage.setItem(INTRO_SEEN_KEY, "1");
   };
 
-  const reduced = prefersReducedMotion();
-  if (reduced) {
+  if (prefersReducedMotion() || sessionStorage.getItem(INTRO_SEEN_KEY) !== null) {
     finish();
     return;
   }
@@ -314,6 +315,7 @@ function initSections(): void {
   const links = [...document.querySelectorAll<HTMLAnchorElement>("a[data-nav]")];
   const dotsList = must<HTMLOListElement>("#dots");
   const dots = new Map<string, HTMLButtonElement>();
+  let current = must<HTMLElement>("[data-section]").id;
 
   const iconOf = (section: HTMLElement): string => {
     const icon = section.dataset.icon;
@@ -351,9 +353,18 @@ function initSections(): void {
   }
 
   const setActive = (id: string) => {
+    current = id;
     for (const [sid, btn] of dots) btn.classList.toggle("active", sid === id);
     for (const link of links) link.classList.toggle("active", link.hash === `#${id}`);
   };
+
+  document.addEventListener("keydown", (ev) => {
+    if (ev.ctrlKey || ev.metaKey || ev.altKey || (ev.key !== "j" && ev.key !== "k")) return;
+    if (ev.target instanceof HTMLElement && ev.target.matches("input, textarea, select, [contenteditable]")) return;
+    const index = sections.findIndex((s) => s.id === current);
+    const next = sections[index + (ev.key === "j" ? 1 : -1)];
+    if (next) goTo(next.id, true);
+  });
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -368,24 +379,70 @@ function initSections(): void {
   if (location.hash.length > 1) goTo(location.hash.slice(1), false);
 }
 
-// Reduced-motion users get paused videos with controls; everyone else only plays them while on screen.
-function initVideos(): void {
-  const videos = document.querySelectorAll<HTMLVideoElement>("video[autoplay]");
+// Reduced-motion users get videos with controls; everyone else gets them playing only while on screen and not hidden.
+// Returns a function that re-checks every video, for when something else changes which ones are shown.
+function initVideos(): () => void {
+  const videos = [...document.querySelectorAll<HTMLVideoElement>("video")];
   if (prefersReducedMotion()) {
-    for (const video of videos) {
-      video.pause();
-      video.controls = true;
-    }
-    return;
+    for (const video of videos) video.controls = true;
+    return () => {};
   }
+  const onScreen = new Set<HTMLVideoElement>();
+  const sync = () => {
+    for (const video of videos) {
+      const shown = getComputedStyle(video.closest("figure") ?? video).visibility !== "hidden";
+      if (onScreen.has(video) && shown) void video.play();
+      else video.pause();
+    }
+  };
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       const video = entry.target as HTMLVideoElement;
-      if (entry.isIntersecting) void video.play();
-      else video.pause();
+      if (entry.isIntersecting) onScreen.add(video);
+      else onScreen.delete(video);
     }
+    sync();
   });
   for (const video of videos) observer.observe(video);
+  return sync;
+}
+
+// Wide screens show one media frame, for the project under the pointer or keyboard focus; the first project's by default.
+function initProjectPreview(syncVideos: () => void): void {
+  const list = must<HTMLElement>(".projects");
+  const empty = must<HTMLElement>(".preview-empty");
+  const figures = new Map<string, HTMLElement>();
+  for (const figure of document.querySelectorAll<HTMLElement>(".project-media figure[data-project]")) {
+    if (!figure.dataset.project) throw new Error("Media figure has an empty data-project");
+    figures.set(figure.dataset.project, figure);
+  }
+  const [defaultId] = figures.keys();
+  if (defaultId === undefined) throw new Error("No project media found");
+
+  const show = (id: string) => {
+    for (const [key, figure] of figures) figure.classList.toggle("active", key === id);
+    empty.classList.toggle("active", !figures.has(id));
+    syncVideos();
+  };
+
+  const known = new Set<string>();
+  for (const item of list.querySelectorAll<HTMLElement>(":scope > li[data-project]")) {
+    const id = item.dataset.project;
+    if (!id) throw new Error("Project has an empty data-project");
+    known.add(id);
+    item.addEventListener("pointerenter", () => show(id));
+    item.addEventListener("focusin", () => show(id));
+  }
+  for (const id of figures.keys()) {
+    if (!known.has(id)) throw new Error(`Media figure for unknown project: ${id}`);
+  }
+
+  list.addEventListener("pointerleave", () => show(defaultId));
+  list.addEventListener("focusout", (ev) => {
+    if (!(ev.relatedTarget instanceof Node && list.contains(ev.relatedTarget))) show(defaultId);
+  });
+  window.matchMedia("(min-width: 1101px)").addEventListener("change", syncVideos);
+  show(defaultId);
 }
 
 // Gently flickers the fire glow and swells short crackle pops, sometimes in bursts; nothing snaps or jumps.
@@ -513,7 +570,7 @@ async function main(): Promise<void> {
   const h1 = must<HTMLElement>(".hero h1");
   const text = h1.textContent ?? "";
   const animate = !prefersReducedMotion();
-  initVideos();
+  initProjectPreview(initVideos());
   initCopyButtons();
   initClock();
   void lockHeroWidth(h1, text);

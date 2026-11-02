@@ -6,14 +6,22 @@
   <title>Austin Bagnall - Software Engineer</title>
   <meta name="description" content="Portfolio of Austin Bagnall: BEng Software student and junior ML software engineer.">
   <meta name="theme-color" content="#0a0a0f">
+  <link rel="canonical" href="https://a-bagnall.github.io/">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Austin Bagnall">
+  <meta property="og:url" content="https://a-bagnall.github.io/">
   <meta property="og:title" content="Austin Bagnall - Software Engineer">
   <meta property="og:description" content="BEng Software student and junior ML software engineer.">
+  <meta property="og:image" content="https://a-bagnall.github.io/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Hi, my name is Austin. I build computer vision and machine learning systems.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0f'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' font-weight='bold' fill='%2333ff33' text-anchor='middle'%3E%3E_%3C/text%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&family=Fira+Sans:wght@400;500&family=IBM+Plex+Mono:wght@500&family=VT323&display=swap" rel="stylesheet">
   <link rel="preload" href="fonts/daedra.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="fonts/ibm-plex-mono-500.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/fira-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+  <script>if (sessionStorage.getItem("intro-seen")) document.documentElement.classList.add("intro-seen");</script> <!-- key is set by runIntro() in main.ts -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="intro-active">
@@ -71,6 +79,10 @@
         <li><span class="hero-ps">$</span>University-of-Newcastle<span class="role">/BEng-Soft</span></li>
         <li><span class="hero-ps">$</span>NUbots<span class="role">/Vision</span></li>
       </ul>
+      <ul class="hero-cta">
+        <li><a data-cmd="open" data-nav href="#projects">projects</a></li>
+        <li><a data-cmd="open" href="Austin_Bagnall_Resume_2026.pdf" download>resume</a></li>
+      </ul>
     </div>
   </section>
 
@@ -80,6 +92,8 @@
       <div class="about-text">
         <h3 class="about-label">work</h3>
         <p class="lead">At Orica Digital Solutions I work on <em>computer vision</em> for rock fragmentation detection, and on the <em>synthetic data</em> that helps train it.</p>
+        <h3 class="about-label">education</h3>
+        <p class="lead">I study a <em>BEng in Software</em> at the University of Newcastle, expecting to graduate 2028/2029 with a GPA above 5.0.</p>
         <h3 class="about-label">side projects</h3>
         <p class="lead">Away from work I build <em>game AI</em>: state machines, behaviour trees and a goal-oriented action planner, plus <em>procedurally generated levels</em> designed to reward exploration.</p>
         <h3 class="about-label">off the clock</h3>
@@ -198,22 +212,27 @@
     <h2 class="block-title">PROJECTS <span class="brace">{</span></h2>
     <div class="block-body">
       <ul class="projects">
-        <li>
+        <li data-project="supermarioagent">
           <a href="https://github.com/a-bagnall/mario-ml">SuperMarioAgent</a>
           <p>Reinforcement learning agent for gym-super-mario-bros. OpenCV sprite detection feeds an epsilon-greedy policy; first completion after 17 epochs.</p>
           <ul class="tags"><li>Python</li><li>OpenCV</li><li>Pygame</li><li>Gymnasium</li></ul>
         </li>
-        <li>
+        <li data-project="numote">
           <a href="https://github.com/NUbots/NUmote">NUmote</a>
           <p>A mobile-friendly web interface for controlling a NUbots robot directly, without a running binary.</p>
           <ul class="tags"><li>Python</li><li>JavaScript</li><li>gRPC</li></ul>
         </li>
-        <li>
+        <li data-project="fyrebranded">
+          <a href="https://github.com/a-bagnall/fyrebranded">Fyrebranded</a>
+          <p>A 2.5D action RPG built around surviving waves of enemies, with hierarchical state machine AI and procedurally generated levels.</p>
+          <ul class="tags"><li>GDScript</li><li>HFSM</li><li>NLLD-PCG</li></ul>
+        </li>
+        <li data-project="gpstracker">
           <a href="https://github.com/a-bagnall/GPSTracker">GPSTracker</a>
           <p>A geofencing tracker that combines real-time location with a tilt sensor to predict danger zones. Built for Orica Hackathon #4 (2025).</p>
           <ul class="tags"><li>Kotlin</li><li>Android</li><li>Gradle</li></ul>
         </li>
-        <li>
+        <li data-project="psdcalc">
           <a href="https://github.com/a-bagnall/PSDCalc">PSDCalc</a>
           <p>A particle size distribution calculator that uses equivalent volume boxes (EVB) to approximate synthetic rock volumes.</p>
           <ul class="tags"><li>Python</li><li>glTF</li></ul>
@@ -228,18 +247,26 @@
       </blockquote>
     </div>
     <div class="project-media">
-      <figure class="fig-video">
+      <figure class="fig-video" data-project="supermarioagent">
         <div class="bracket-frame">
-          <video src="best_run.mp4" width="512" height="480" autoplay muted loop playsinline aria-label="The agent completing World 1-1, with sprite detection overlaid"></video>
+          <video src="best_run.mp4" width="512" height="480" muted loop playsinline preload="metadata" aria-label="The agent completing World 1-1, with sprite detection overlaid"></video>
         </div>
         <figcaption><span>SuperMarioAgent</span> best run</figcaption>
       </figure>
-      <figure class="fig-image">
+      <figure class="fig-image" data-project="numote">
         <div class="bracket-frame">
-          <img src="numote.webp" width="1170" height="540" alt="NUmote on a phone: the robot's camera feed between two joysticks, with Get Up, Wave, Stand and Walk buttons">
+          <img src="numote.webp" width="1170" height="540" loading="lazy" alt="NUmote on a phone: the robot's camera feed between two joysticks, with Get Up, Wave, Stand and Walk buttons">
         </div>
         <figcaption><span>NUmote</span> on a phone</figcaption>
       </figure>
+      <figure class="fig-image" data-project="fyrebranded">
+        <div class="bracket-frame">
+          <video src="fyrebranded.mp4" width="960" height="540" muted loop playsinline preload="metadata" aria-label="Fyrebranded gameplay"></video>
+        </div>
+        <figcaption><span>Fyrebranded</span> gameplay</figcaption>
+      </figure>
+      <p class="preview-empty" aria-hidden="true">// no preview</p>
+      <p class="preview-hint" aria-hidden="true">// hover over a project</p>
     </div>
   </section>
 
