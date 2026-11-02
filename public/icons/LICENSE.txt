@@ -21,7 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---
 
-brain-circuit.svg, scan-eye.svg, database.svg, gamepad-2.svg and dices.svg are
+brain-circuit.svg, scan-eye.svg, database.svg, gamepad-2.svg, dices.svg and
+boxes.svg are
 from Lucide (https://lucide.dev), recoloured. database.svg is derived from
 Feather, Copyright (c) 2013-present Cole Bemis, under the MIT License above.
 
