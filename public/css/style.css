@@ -98,9 +98,9 @@ a { color: inherit; }
   align-items: center;
   justify-content: flex-end;
   background: linear-gradient(var(--bg) 60%, transparent);
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
-#nav nav { display: flex; flex-wrap: wrap; }
+#nav nav { display: flex; flex-wrap: wrap; font-family: var(--font-mono); }
 #nav nav a {
   text-decoration: none;
   padding: 0 1.25rem;
@@ -109,6 +109,15 @@ a { color: inherit; }
 #nav nav a:first-child { border-left: 0; }
 #nav nav a:hover, #nav nav a.active { color: var(--accent-bright); }
 .nav-index { color: var(--accent); }
+/* Terminal prompt: "$" on every entry, ">" on the current one. */
+.nav-index::before { content: "$"; content: "$" / ""; }
+#nav nav a.active .nav-index::before { content: ">"; content: ">" / ""; }
+#nav nav a:hover .nav-label { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 0.35em; }
+@media (min-width: 701px) {
+  /* The cursor's width is always reserved so entries never shift when it appears. */
+  .nav-label::after { content: "_"; visibility: hidden; }
+  #nav nav a.active .nav-label::after, #nav nav a:hover .nav-label::after { visibility: visible; animation: blink 1s steps(1) infinite; }
+}
 #nav nav a.active .nav-index { color: var(--accent-bright); text-shadow: var(--glow); }
 
 /* Letters-and-digits subset of Daedra by Pixel Sagas, whose licence allows web embedding but only personal, non-commercial use. */
@@ -121,7 +130,7 @@ a { color: inherit; }
   margin: 0 auto 0 -0.5rem;
   padding: 0.25rem 0.5rem;
   font-family: "Daedra", serif;
-  font-size: 2.6rem;
+  font-size: 4rem;
   line-height: 1;
   text-decoration: none;
   color: var(--accent-bright);
@@ -181,10 +190,18 @@ a { color: inherit; }
 }
 .brace { color: var(--accent); font-family: var(--font-heading); font-size: clamp(2.2rem, 5vw, 3.5rem); }
 .brace-close { line-height: 1; }
+.section-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 2rem; margin-top: 0.5rem; }
+.section-foot .quote { flex: 1 1 20rem; }
 
-.hero { margin: auto 0; }
-.hero h1 { font-family: var(--font-heading); font-weight: 500; font-size: clamp(2.5rem, 7vw, 5rem); color: var(--accent-bright); text-shadow: var(--glow); margin: 0; }
-.hero p { font-size: 1.5rem; margin: 1rem 0 0; }
+.hero { margin: auto 0; --hero-size: clamp(2.5rem, 7vw, 5rem); }
+.hero h1 { font-family: var(--font-heading); font-weight: 500; font-size: var(--hero-size); color: var(--accent-bright); text-shadow: var(--glow); margin: 0; }
+/* --hero-ems is the heading's width in em, set by lockHeroWidth() in main.ts. */
+.hero p { font-size: 1.5rem; margin: 1rem 0 0; max-width: min(100%, calc(var(--hero-size) * var(--hero-ems, 1000))); }
+.hero p em { font-style: normal; color: var(--accent-bright); }
+.hero-tags { list-style: none; margin: 1.5rem 0 0; padding: 0; font-family: var(--font-mono); font-size: 1.1rem; max-width: min(100%, calc(var(--hero-size) * var(--hero-ems, 1000))); }
+.hero-tags li { padding: 0.15rem 0; }
+.hero-ps { margin-right: 0.6em; color: var(--accent); }
+.hero-tags .role { color: var(--accent-bright); }
 
 .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 200; padding: 0.5rem 1rem; background: var(--bg); border: 1px solid var(--accent); }
 .skip-link:focus { top: 1rem; }
@@ -197,23 +214,36 @@ a { color: inherit; }
 
 /* The photo is sized so it fits beside the text without making the screen taller than the window. */
 .about-body { display: grid; grid-template-columns: minmax(0, 42rem) minmax(0, 1fr); gap: 4rem; align-items: start; }
-.about-text .lead:first-child { margin-top: 0; }
-.about-photo { display: block; justify-self: center; width: clamp(12rem, calc(100dvh - 23rem), 26rem); max-width: 100%; height: auto; border: 1px solid var(--accent); box-shadow: var(--glow); }
+.about-text .lead { margin: 0; }
+.about-text em { font-style: normal; color: var(--accent-bright); }
+.about-label { margin: 1.5rem 0 0.25rem; font-family: var(--font-mono); font-size: 0.95rem; font-weight: 500; color: var(--accent); }
+.about-label::before { content: "// "; content: "// " / ""; }
+.about-text .about-label:first-child { margin-top: 0; }
+.about-photo-frame { position: relative; justify-self: center; width: clamp(12rem, calc(100dvh - 23rem), 26rem); max-width: 100%; }
+.about-photo { display: block; width: 100%; height: auto; border: 1px solid var(--accent); box-shadow: var(--glow); }
+/* Corner brackets on the top-left and bottom-right of a framed image or video. */
+.bracket-frame { position: relative; }
+.bracket-frame::before, .bracket-frame::after { content: ""; position: absolute; width: 1.75rem; height: 1.75rem; border: 0 solid var(--accent-bright); pointer-events: none; }
+.bracket-frame::before { top: -0.6rem; left: -0.6rem; border-top-width: 2px; border-left-width: 2px; }
+.bracket-frame::after { bottom: -0.6rem; right: -0.6rem; border-bottom-width: 2px; border-right-width: 2px; }
 
-.skills-body { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 2.1fr); gap: 3rem; align-content: stretch; }
-.skills-intro .lead:first-child { margin-top: 0; }
-.quote { margin: 2rem 0 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+.skills-body { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr; }
+.quote { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1rem; margin: 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
 .quote p { margin: 0; font-style: italic; }
-.quote footer { margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.95rem; color: var(--accent-bright); }
-.skills-panel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+.quote footer { font-family: var(--font-mono); font-size: 0.95rem; color: var(--accent-bright); }
+.skills-panel { --skills-gap: clamp(1.5rem, 3vw, 3rem); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--skills-gap); }
 .skill-col { position: relative; }
 .skill-col .group:first-child { margin-top: 0; }
 /* Divider centred in the gap between columns. */
-.skill-col::before { content: ""; position: absolute; top: 0; bottom: 0; left: -1rem; width: 3px; background: var(--accent); box-shadow: var(--glow); }
-.skill-col:first-child::before { left: -1.5rem; }
+.skill-col::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(var(--skills-gap) / -2); width: 3px; background: var(--accent); box-shadow: var(--glow); }
+.skill-col:first-child::before { display: none; }
 .skill-list { list-style: none; margin: 0; padding: 0; }
-.skill-list li { display: flex; align-items: center; gap: 0.8em; padding: 0.25em 0; font-size: clamp(1rem, 2.6dvh, 1.5rem); line-height: 1.25; }
-.skill-icon { flex: none; width: 1.5em; height: 1.5em; }
+.skill-list li { display: flex; align-items: center; gap: 0.8em; padding: 0.3em 0; font-size: clamp(1.05rem, 3dvh, 1.6rem); line-height: 1.25; break-inside: avoid; }
+.skill-icon { flex: none; width: 1.35em; height: 1.35em; }
+/* Languages and Tools are the long lists, so on wide screens they run in two sub-columns to use the width and keep the section within one screen. */
+@media (min-width: 1101px) {
+  .skill-col:not(:nth-child(2)) .skill-list { columns: 2; column-gap: 1.5rem; }
+}
 span.skill-icon { text-align: center; color: var(--accent); font-family: var(--font-mono); line-height: 22px; }
 
 .projects {
@@ -249,83 +279,124 @@ span.skill-icon { text-align: center; color: var(--accent); font-family: var(--f
 .projects .tags { grid-row: 1; grid-column: 2; }
 .projects .tags li { font-size: 0.9rem; padding: 0.1rem 0.7rem; }
 
-.contact { list-style: none; margin: 1.5rem 0 0; padding: 0; max-width: 40rem; }
-.contact li { border-top: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
-.contact li:last-child { border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.contact-body { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 3rem; }
+.contact-main { min-width: 0; }
+.local-time { margin: 0.5rem 0 0; font-family: var(--font-mono); font-size: 0.95rem; color: var(--accent); }
+.local-time::before { content: "// local time "; content: "// local time " / ""; }
+.local-time time { color: var(--accent-bright); }
+.contact { list-style: none; margin: 1.5rem 0 0; padding: 0; max-width: 46rem; }
+.contact-row { display: flex; border-top: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.contact-row:last-child { border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
 .contact a {
-  display: grid;
-  grid-template-columns: 9rem 1fr;
+  flex: 1;
+  min-width: 0;
+  display: flex;
   align-items: baseline;
+  gap: 0.6em;
   padding: 1.1rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: clamp(1.05rem, 2.4dvh, 1.35rem);
   text-decoration: none;
 }
+.contact a::before { content: "$ " attr(data-cmd); content: "$ " attr(data-cmd) / ""; color: var(--accent); }
 .contact a:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
-.contact-label { color: var(--accent-bright); font-family: var(--font-heading); font-size: 1.4rem; }
-.contact-handle { font-size: 1.05rem; }
-.contact a:hover .contact-handle { color: var(--accent-bright); }
-
-/* Timeline: one node per role on a single axis */
-.work-body { display: flex; flex-direction: column; }
-.work-roles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 3rem; }
-.work-roles .group:first-child { margin-top: 0; }
-.work-roles p { margin: 0; }
-.timeline {
-  position: relative;
-  height: 4px;
-  margin: auto 5rem;
-  background: var(--accent);
-  box-shadow: var(--glow);
+.contact-label { color: var(--accent-bright); overflow-wrap: anywhere; }
+.copy {
+  min-width: 5.5rem;
+  padding: 0 1rem;
+  border: 0;
+  border-left: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  background: none;
+  color: var(--accent);
+  font: 0.9rem var(--font-mono);
+  cursor: pointer;
 }
+.copy:hover, .copy:focus-visible { background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent-bright); }
+/* Decorative; delete this block and the .contact-sigil div in index.html to remove it. */
+.contact-sigil {
+  font-family: "Daedra", serif;
+  font-size: clamp(10rem, 34dvh, 20rem);
+  line-height: 1;
+  user-select: none;
+  color: var(--accent-bright);
+  text-shadow: 0 0 6px rgba(51, 255, 51, 0.9), 0 0 18px rgba(51, 255, 51, 0.6), 0 0 40px rgba(20, 180, 20, 0.5);
+  animation: ominous-glow 5s ease-in-out infinite;
+}
+
+/* Terminal touches, kept to a few places. The "/ ''" alt text keeps screen readers from announcing the decoration. */
+::selection { background: var(--accent); color: var(--bg); }
+.projects a::before { content: "./"; content: "./" / ""; color: var(--accent); }
+.quote footer::before { content: "// "; content: "// " / ""; }
+#skills .group::before { content: "~/"; content: "~/" / ""; opacity: 0.6; }
+.projects a::after, .contact-label::after { content: "_"; content: "_" / ""; visibility: hidden; }
+.projects a:hover::after, .projects a:focus-visible::after, .contact a:hover .contact-label::after, .contact a:focus-visible .contact-label::after { visibility: visible; animation: blink 1s steps(1) infinite; }
+
+/* Timeline: cards alternate above and below one axis, each joined to its dot by a line.
+   initTimelines() in main.ts sets --pos and data-side/data-align on each node; the nodes use display: contents so cards share the grid rows. */
+.work-body { display: flex; flex-direction: column; }
+.timeline {
+  --card-w: min(30rem, 33vw);
+  --link: 2.25rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 4px auto;
+  margin: auto 5rem;
+}
+.timeline::before { content: ""; grid-row: 2; grid-column: 1; background: var(--accent); box-shadow: var(--glow); }
+.timeline-node { display: contents; }
 .timeline-year {
   position: absolute;
+  grid-row: 2 / 3;
+  grid-column: 1 / 2;
   top: 50%;
   transform: translateY(-50%);
   color: var(--accent-bright);
 }
 .timeline-year-start { right: 100%; margin-right: 1rem; }
 .timeline-year-end { left: 100%; margin-left: 2.25rem; }
-.timeline-node {
-  position: absolute;
-  top: 50%;
-  left: var(--pos);
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 .timeline-dot {
-  width: 40px; height: 40px;
-  margin-top: -18px;
+  position: absolute;
+  grid-row: 2 / 3;
+  grid-column: 1 / 2;
+  left: var(--pos);
+  top: 50%;
+  width: 30px; height: 30px;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
   border: 3px solid var(--accent);
   background: radial-gradient(var(--accent-bright) 45%, transparent 50%);
   box-shadow: var(--glow);
   transition: transform 0.15s ease;
 }
-.timeline-node:hover .timeline-dot { transform: scale(1.15); }
-.timeline-label {
-  margin-top: 0.75rem;
-  font-weight: 500;
-  font-size: 1.6rem;
-  color: var(--accent-bright);
-  white-space: nowrap;
-}
-.timeline-dates { margin-top: 0.2rem; font-family: var(--font-mono); font-size: 0.9rem; white-space: nowrap; }
+.timeline-node:hover .timeline-dot { transform: translate(-50%, -50%) scale(1.15); }
+.timeline-card { position: relative; grid-column: 1; width: var(--card-w); }
+.timeline-card .group { margin: 0 0 0.25rem; }
+.timeline-card p { margin: 0; font-size: 1rem; line-height: 1.5; }
+.timeline-dates { margin-bottom: 0.35rem; font-family: var(--font-mono); font-size: 0.85rem; opacity: 0.7; }
+/* Connector from each dot to its card's edge; 13px is the dot's radius less half the axis height. */
+.timeline-dot::before { content: ""; position: absolute; left: calc(50% - 1px); width: 2px; height: calc(var(--link) - 13px); background: var(--accent); box-shadow: var(--glow); }
+.timeline-node[data-side="up"] .timeline-card { grid-row: 1; margin-bottom: var(--link); }
+.timeline-node[data-side="up"] .timeline-dot::before { bottom: calc(100% + 3px); }
+.timeline-node[data-side="down"] .timeline-card { grid-row: 3; margin-top: var(--link); }
+.timeline-node[data-side="down"] .timeline-dot::before { top: calc(100% + 3px); }
+.timeline-node[data-align="start"] .timeline-card { justify-self: start; }
+.timeline-node[data-align="end"] .timeline-card { justify-self: end; text-align: right; }
+.timeline-node[data-align="center"] .timeline-card { justify-self: start; margin-left: calc(var(--pos) - var(--card-w) / 2); text-align: center; }
 
 @media (max-width: 1100px) {
-  .work-roles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .skill-col:first-child::before { display: none; }
   #projects { display: flex; }
   .project-media { flex-direction: row; flex-wrap: wrap; margin: 2rem 0 0; }
-  .skills-body { grid-template-columns: 1fr; align-content: start; }
+  .skills-body { grid-template-columns: 1fr; align-content: start; grid-template-rows: auto; }
   .project-media .fig-video, .project-media .fig-image { width: min(20rem, 100%); }
 }
 
 @media (max-width: 700px) {
   :root { --nav-h: 6.25rem; }
   html { scroll-snap-type: none; }
-  #nav { font-size: 0.9rem; }
-  #nav .home { font-size: 3rem; }
+  #nav { font-size: 0.85rem; }
+  #nav .home { font-size: 3.5rem; }
   #nav nav { display: grid; grid-template-columns: repeat(3, 1fr); flex: 1; max-width: 20rem; }
   /* 44px minimum touch targets */
   #nav nav a {
@@ -334,7 +405,7 @@ span.skill-icon { text-align: center; color: var(--accent); font-family: var(--f
     justify-content: center;
     gap: 0.35em;
     min-height: 44px;
-    padding: 0 0.5rem;
+    padding: 0 0.25rem;
     border-left: 0;
     border-radius: 0.25rem;
     -webkit-tap-highlight-color: transparent;
@@ -344,29 +415,24 @@ span.skill-icon { text-align: center; color: var(--accent); font-family: var(--f
   #dots button { width: 2.75rem; height: 2.75rem; -webkit-tap-highlight-color: transparent; }
   .screen { padding-right: 3rem; }
   .block-body { padding-left: 0; }
-  /* Vertical timeline: the axis runs down the left, nodes keep their proportional position along it. */
-  .timeline { width: 4px; height: 32rem; margin: 4rem 0 4rem 2rem; }
-  .timeline-year-start { top: auto; right: auto; bottom: 100%; left: 50%; margin: 0 0 2rem; transform: translateX(-50%); }
-  .timeline-year-end { top: 100%; left: 50%; margin: 2rem 0 0; transform: translateX(-50%); }
-  .timeline-node {
-    top: var(--pos);
-    left: 50%;
-    transform: translate(-20px, -50%);
-    display: grid;
-    grid-template-columns: 40px auto;
-    align-items: center;
-    column-gap: 0.9rem;
-  }
-  .timeline-dot { grid-row: 1 / span 2; margin-top: 0; }
-  .timeline-label { margin-top: 0; font-size: 1.1rem; white-space: normal; text-align: left; }
-  .timeline-dates { margin-top: 0; white-space: normal; text-align: left; }
-  .about-body, .skills-panel, .work-roles { grid-template-columns: 1fr; }
-  .work-roles { gap: 1.5rem 0; }
+  /* Vertical timeline: the axis runs down the left and each card sits beside its dot, in date order. */
+  .timeline { display: block; margin: 3rem 0; padding-left: 3.25rem; }
+  .timeline::before { position: absolute; left: 19px; top: 0; bottom: 0; width: 4px; }
+  .timeline-year-start { top: -2rem; right: auto; left: 0; margin: 0; transform: none; }
+  .timeline-year-end { top: auto; bottom: -2rem; left: 0; margin: 0; transform: none; }
+  .timeline-node { display: block; position: relative; margin-bottom: 2rem; }
+  .timeline-node:last-child { margin-bottom: 0; }
+  .timeline-dot { left: calc(-3.25rem + 3px); top: 0; width: 36px; height: 36px; transform: none; }
+  .timeline-node:hover .timeline-dot { transform: none; }
+  .timeline-node[data-side] .timeline-card, .timeline-node[data-align] .timeline-card { width: auto; margin: 0; text-align: left; }
+  .timeline-node[data-side] .timeline-dot::before { display: none; }
+  .about-body, .skills-panel { grid-template-columns: 1fr; }
   .projects > li { grid-template-columns: 1fr; }
   .projects .tags { grid-row: auto; grid-column: 1; }
-  .contact a { grid-template-columns: 1fr; gap: 0.2rem; }
-  .contact-handle { overflow-wrap: anywhere; }
-  .about-photo { max-width: 20rem; justify-self: start; }
+  .contact-body { grid-template-columns: 1fr; }
+  .contact-sigil { display: none; }
+  .contact a { flex-wrap: wrap; row-gap: 0.1rem; font-size: 0.95rem; }
+  .about-photo-frame { max-width: 20rem; justify-self: start; }
   .skill-col::before { display: none; }
   .skill-list li { font-size: 1.1rem; }
 }
@@ -380,4 +446,7 @@ span.skill-icon { text-align: center; color: var(--accent); font-family: var(--f
   .cursor::after { animation: none; }
   body:not(.intro-active) #glow, .glow-base { animation: none; }
   #nav .home { animation: none; }
+  #nav nav a .nav-label::after { animation: none; }
+  .projects a::after, .contact-label::after { animation: none; }
+  .contact-sigil { animation: none; }
 }

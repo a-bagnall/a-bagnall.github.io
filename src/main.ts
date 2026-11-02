@@ -11,6 +11,10 @@ const BACKSPACE_DELAY_MS = 55;
 const LINE_DELAY_MS = 200;
 const BAR_WIDTH = 24;
 const LEAVE_MS = 500; // keep in sync with the #intro opacity transition in style.css
+const COPY_FEEDBACK_MS = 1500; // how long a copy button shows its confirmation
+const CLOCK_TICK_MS = 15000;
+const CARD_START_BELOW_PCT = 33; // timeline cards for nodes before this point on the axis start at the node
+const CARD_END_ABOVE_PCT = 67; // ...and cards for nodes after this point end at it
 
 // Headings that scramble in when their screen first comes into view; all are monospace so widths hold steady.
 const SCRAMBLE_SELECTOR = ".block-title, .group, .projects a, .contact-label";
@@ -191,9 +195,12 @@ function initTimelines(): void {
       return pct;
     };
 
-    for (const node of timeline.querySelectorAll<HTMLElement>(".timeline-node")) {
+    for (const [index, node] of timeline.querySelectorAll<HTMLElement>(".timeline-node").entries()) {
       const start = readYearMonth(node.dataset.start, "timeline-node data-start");
-      node.style.setProperty("--pos", `${pctOf(start, `Node start ${node.dataset.start}`).toFixed(2)}%`);
+      const pct = pctOf(start, `Node start ${node.dataset.start}`);
+      node.style.setProperty("--pos", `${pct.toFixed(2)}%`);
+      node.dataset.side = index % 2 === 0 ? "up" : "down";
+      node.dataset.align = pct < CARD_START_BELOW_PCT ? "start" : pct > CARD_END_ABOVE_PCT ? "end" : "center";
 
       // Tooltip text: ongoing when there is no data-end.
       let range: string;
@@ -208,7 +215,7 @@ function initTimelines(): void {
       const dates = document.createElement("span");
       dates.className = "timeline-dates";
       dates.textContent = range;
-      node.appendChild(dates);
+      must<HTMLElement>(".group", node).after(dates);
     }
   }
 }
@@ -337,7 +344,6 @@ function initSections(): void {
   for (const link of links) {
     const target = sections.find((s) => s.id === link.hash.slice(1));
     if (!target) throw new Error(`Nav link has no section: ${link.hash}`);
-    must<HTMLElement>(".nav-index", link).textContent = iconOf(target);
     link.addEventListener("click", (ev) => {
       ev.preventDefault();
       goTo(link.hash.slice(1), true);
@@ -462,12 +468,55 @@ function initGlitch(): void {
   schedule();
 }
 
+// Sizes the tagline to the finished heading plus its trailing cursor, so it wraps no wider than the heading.
+async function lockHeroWidth(h1: HTMLElement, text: string): Promise<void> {
+  const style = getComputedStyle(h1);
+  await document.fonts.load(`${style.fontWeight} ${style.fontSize} ${style.fontFamily}`, text);
+  const probe = document.createElement("span");
+  probe.textContent = `${text}_`;
+  probe.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap";
+  h1.append(probe);
+  const width = probe.getBoundingClientRect().width;
+  probe.remove();
+  must<HTMLElement>(".hero").style.setProperty("--hero-ems", String(width / parseFloat(style.fontSize)));
+}
+
+// Copies a button's data-copy text to the clipboard and briefly confirms it on the button.
+function initCopyButtons(): void {
+  for (const button of document.querySelectorAll<HTMLButtonElement>("button[data-copy]")) {
+    const text = button.dataset.copy;
+    if (!text) throw new Error("Copy button has an empty data-copy");
+    const label = button.textContent ?? "";
+    button.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(text);
+      button.textContent = "copied_";
+      await sleep(COPY_FEEDBACK_MS);
+      button.textContent = label;
+    });
+  }
+}
+
+// Shows the current time in the zone named by each time element's data-tz.
+function initClock(): void {
+  for (const el of document.querySelectorAll<HTMLElement>("time[data-tz]")) {
+    const format = new Intl.DateTimeFormat("en-AU", { timeZone: el.dataset.tz, hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZoneName: "short" });
+    const tick = () => {
+      el.textContent = format.format(new Date());
+    };
+    tick();
+    setInterval(tick, CLOCK_TICK_MS);
+  }
+}
+
 // The hero is blanked up front so it can be typed once the intro overlay is gone.
 async function main(): Promise<void> {
   const h1 = must<HTMLElement>(".hero h1");
   const text = h1.textContent ?? "";
   const animate = !prefersReducedMotion();
   initVideos();
+  initCopyButtons();
+  initClock();
+  void lockHeroWidth(h1, text);
   if (animate) {
     h1.setAttribute("aria-label", text);
     h1.textContent = "";

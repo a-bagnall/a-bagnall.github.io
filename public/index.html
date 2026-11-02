@@ -49,24 +49,28 @@
 <header id="nav">
   <a class="home" href="#top" aria-label="Home"><span aria-hidden="true">Q</span></a>
   <nav>
-    <a data-nav href="#about"><span class="nav-index"></span> About</a>
-    <a data-nav href="#skills"><span class="nav-index"></span> Skills</a>
-    <a data-nav href="#work"><span class="nav-index"></span> Work</a>
-    <a data-nav href="#projects"><span class="nav-index"></span> Projects</a>
-    <a data-nav href="#contact"><span class="nav-index"></span> Contact</a>
-    <a href="Austin_Bagnall_Resume_2026.pdf" download><span class="nav-index">=</span> Resume</a>
+    <a data-nav href="#about"><span class="nav-index"></span> about</a>
+    <a data-nav href="#skills"><span class="nav-index"></span> skills</a>
+    <a data-nav href="#work"><span class="nav-index"></span> work</a>
+    <a data-nav href="#projects"><span class="nav-index"></span> projects</a>
+    <a data-nav href="#contact"><span class="nav-index"></span> contact</a>
+    <a href="Austin_Bagnall_Resume_2026.pdf" download><span class="nav-index"></span> resume</a>
   </nav>
 </header>
 
 <ol id="dots" aria-label="Sections"></ol>
 
-<!-- Content comes from github.com/a-bagnall and the start dates you gave. -->
 <main id="main">
 
   <section class="screen" id="top" data-section data-icon="~">
     <div class="hero">
-      <h1>Hi, I am Austin.</h1>
-      <p>BEng Software student, junior ML software engineer and NUbots team member.</p>
+      <h1>Hi, my name is Austin.</h1>
+      <p>I build <em>computer vision</em> and <em>machine learning</em> systems.</p>
+      <ul class="hero-tags">
+        <li><span class="hero-ps">$</span>Orica-Digital-Solutions<span class="role">/Jnr-ML-Engineer</span></li>
+        <li><span class="hero-ps">$</span>University-of-Newcastle<span class="role">/BEng-Soft</span></li>
+        <li><span class="hero-ps">$</span>NUbots<span class="role">/Vision</span></li>
+      </ul>
     </div>
   </section>
 
@@ -74,25 +78,29 @@
     <h2 class="block-title">ABOUT <span class="brace">{</span></h2>
     <div class="block-body about-body">
       <div class="about-text">
-        <p class="lead">I am a Software Engineering student at the University of Newcastle and a junior ML software engineer at Orica Digital Solutions, where I work on computer vision for rock fragmentation detection and the synthetic data that helps train it.</p>
-        <p class="lead">Away from work I build game AI: state machines, behaviour trees and a goal-oriented action planner, plus procedurally generated levels designed to reward exploration.</p>
-        <p class="lead">Outside of work I like WoW, Dark Souls and Lord of the Rings, films (mostly comedies and action/adventure), music, cooking for others, painting D&amp;D minis, and tabletop games like D&amp;D, Werewolf and Exploding Kittens.</p>
+        <h3 class="about-label">work</h3>
+        <p class="lead">At Orica Digital Solutions I work on <em>computer vision</em> for rock fragmentation detection, and on the <em>synthetic data</em> that helps train it.</p>
+        <h3 class="about-label">side projects</h3>
+        <p class="lead">Away from work I build <em>game AI</em>: state machines, behaviour trees and a goal-oriented action planner, plus <em>procedurally generated levels</em> designed to reward exploration.</p>
+        <h3 class="about-label">off the clock</h3>
+        <p class="lead">WoW, Dark Souls and Lord of the Rings. Comedies and action films, music, cooking for others, painting D&amp;D minis, and tabletop games like D&amp;D, Werewolf and Exploding Kittens.</p>
       </div>
-      <img class="about-photo" src="austin.webp" width="700" height="700" alt="Austin sitting on a grassy clifftop above the ocean at sunset">
+      <div class="about-photo-frame bracket-frame">
+        <img class="about-photo" src="austin.webp" width="700" height="700" alt="Austin sitting on a grassy clifftop above the ocean at sunset">
+      </div>
     </div>
-    <div class="brace brace-close">}</div>
+    <div class="section-foot">
+      <div class="brace brace-close">}</div>
+      <blockquote class="quote">
+        <p>"If more of us valued food and cheer and song above hoarded gold, it would be a merrier world."</p>
+        <footer>J.R.R. Tolkien</footer>
+      </blockquote>
+    </div>
   </section>
 
   <section class="screen" id="skills" data-section data-icon="*">
     <h2 class="block-title">SKILLS <span class="brace">{</span></h2>
     <div class="block-body skills-body">
-      <div class="skills-intro">
-        <p class="lead">I work mainly on AI systems and on improving algorithms, and I am comfortable working across the full stack. This is what I use.</p>
-        <blockquote class="quote">
-          <p>"Bad programmers worry about the code. Good programmers worry about data structures and their relationships."</p>
-          <footer>Linus Torvalds</footer>
-        </blockquote>
-      </div>
       <div class="skills-panel">
         <div class="skill-col">
           <h3 class="group">Languages</h3>
@@ -110,19 +118,12 @@
           </ul>
         </div>
         <div class="skill-col">
-          <h3 class="group">ML and vision</h3>
+          <h3 class="group">Machine-Learning-&-Vision</h3>
           <ul class="skill-list">
             <li><img class="skill-icon" src="icons/pytorch.svg" alt="" width="22" height="22">PyTorch</li>
             <li><img class="skill-icon" src="icons/opencv.svg" alt="" width="22" height="22">OpenCV</li>
             <li><img class="skill-icon" src="icons/gymnasium.png" alt="" width="22" height="22">Gymnasium</li>
-          </ul>
-          <h3 class="group">Techniques</h3>
-          <ul class="skill-list">
             <li><img class="skill-icon" src="icons/brain-circuit.svg" alt="" width="22" height="22">Reinforcement learning</li>
-            <li><img class="skill-icon" src="icons/scan-eye.svg" alt="" width="22" height="22">Computer vision</li>
-            <li><img class="skill-icon" src="icons/boxes.svg" alt="" width="22" height="22">Synthetic data generation</li>
-            <li><img class="skill-icon" src="icons/gamepad-2.svg" alt="" width="22" height="22">Game AI</li>
-            <li><img class="skill-icon" src="icons/dices.svg" alt="" width="22" height="22">Procedural generation</li>
           </ul>
         </div>
         <div class="skill-col">
@@ -144,46 +145,53 @@
         </div>
       </div>
     </div>
-    <div class="brace brace-close">}</div>
+    <div class="section-foot">
+      <div class="brace brace-close">}</div>
+      <blockquote class="quote">
+        <p>"Bad programmers worry about the code. Good programmers worry about data structures and their relationships."</p>
+        <footer>Linus Torvalds</footer>
+      </blockquote>
+    </div>
   </section>
 
   <section class="screen" id="work" data-section data-icon="$">
     <h2 class="block-title">WORK <span class="brace">{</span></h2>
     <div class="block-body work-body">
-      <div class="work-roles">
-        <div>
-          <h3 class="group">Orica Digital Solutions</h3>
-          <p>Junior ML software engineer. Built an end-to-end synthetic data pipeline for training computer vision models, adapted SAHI (Slicing-Aided Hyper Inference) for rock fragmentation detection, and wrote a lightweight synthetic LiDAR system for Blender files to support a feature-matching model.</p>
-        </div>
-        <div>
-          <h3 class="group">NUbots</h3>
-          <p>Outreach and vision teams. Helped lead demonstrations for schools and universities (UNSW, Guizhou University, and the AROSE event at Newcastle Museum), and am reworking the segmentation and semantic vision detection model while developing a depth estimation model.</p>
-        </div>
-        <div>
-          <h3 class="group">Robotildas</h3>
-          <p>A new joint RoboCup team between NUbots and UNSW's rUNSWift.</p>
-        </div>
-      </div>
-      <!-- Each node shows its dates. A node with no data-end is ongoing.
+      <!-- Each node holds its card. A node with no data-end is ongoing.
            All dates are YYYY-MM; the axis end (data-to) may be "now". -->
       <div class="timeline" data-from="2024-07" data-to="now">
         <span class="timeline-year timeline-year-start"></span>
         <span class="timeline-year timeline-year-end"></span>
         <div class="timeline-node" data-start="2024-12">
+          <div class="timeline-card">
+            <h3 class="group">Orica Digital Solutions</h3>
+            <p>Junior ML software engineer. Built an end-to-end synthetic data pipeline for training computer vision models, adapted SAHI (Slicing-Aided Hyper Inference) for rock fragmentation detection, and wrote a lightweight synthetic LiDAR system for Blender files to support a feature-matching model.</p>
+          </div>
           <span class="timeline-dot"></span>
-          <span class="timeline-label">Orica Digital Solutions</span>
         </div>
         <div class="timeline-node" data-start="2025-09">
+          <div class="timeline-card">
+            <h3 class="group">NUbots</h3>
+            <p>Outreach and vision teams. Helped lead demonstrations for schools and universities (UNSW, Guizhou University, and the AROSE event at Newcastle Museum), and am reworking the segmentation and semantic vision detection model while developing a depth estimation model.</p>
+          </div>
           <span class="timeline-dot"></span>
-          <span class="timeline-label">NUbots</span>
         </div>
         <div class="timeline-node" data-start="2026-11">
+          <div class="timeline-card">
+            <h3 class="group">Robotildas</h3>
+            <p>A new joint RoboCup team between NUbots and UNSW's rUNSWift.</p>
+          </div>
           <span class="timeline-dot"></span>
-          <span class="timeline-label">Robotildas</span>
         </div>
       </div>
     </div>
-    <div class="brace brace-close">}</div>
+    <div class="section-foot">
+      <div class="brace brace-close">}</div>
+      <blockquote class="quote">
+        <p>"Looking back, we were the luckiest people in the world. There was no choice but to be pioneers; no time to be beginners."</p>
+        <footer>Margaret Hamilton</footer>
+      </blockquote>
+    </div>
   </section>
 
   <section class="screen" id="projects" data-section data-icon="#">
@@ -212,14 +220,24 @@
         </li>
       </ul>
     </div>
-    <div class="brace brace-close">}</div>
+    <div class="section-foot">
+      <div class="brace brace-close">}</div>
+      <blockquote class="quote">
+        <p>"Programs must be written for people to read, and only incidentally for machines to execute."</p>
+        <footer>Harold Abelson</footer>
+      </blockquote>
+    </div>
     <div class="project-media">
       <figure class="fig-video">
-        <video src="best_run.mp4" width="512" height="480" autoplay muted loop playsinline aria-label="The agent completing World 1-1, with sprite detection overlaid"></video>
+        <div class="bracket-frame">
+          <video src="best_run.mp4" width="512" height="480" autoplay muted loop playsinline aria-label="The agent completing World 1-1, with sprite detection overlaid"></video>
+        </div>
         <figcaption><span>SuperMarioAgent</span> best run</figcaption>
       </figure>
       <figure class="fig-image">
-        <img src="numote.webp" width="1170" height="540" alt="NUmote on a phone: the robot's camera feed between two joysticks, with Get Up, Wave, Stand and Walk buttons">
+        <div class="bracket-frame">
+          <img src="numote.webp" width="1170" height="540" alt="NUmote on a phone: the robot's camera feed between two joysticks, with Get Up, Wave, Stand and Walk buttons">
+        </div>
         <figcaption><span>NUmote</span> on a phone</figcaption>
       </figure>
     </div>
@@ -227,15 +245,29 @@
 
   <section class="screen" id="contact" data-section data-icon="@">
     <h2 class="block-title">CONTACT <span class="brace">{</span></h2>
-    <div class="block-body">
-      <p class="lead">Based in Newcastle, NSW. Find me on GitHub or LinkedIn, or download my resume.</p>
-      <ul class="contact">
-        <li><a href="https://github.com/a-bagnall"><span class="contact-label">GitHub</span><span class="contact-handle">github.com/a-bagnall</span></a></li>
-        <li><a href="https://www.linkedin.com/in/austin-bagnall/"><span class="contact-label">LinkedIn</span><span class="contact-handle">linkedin.com/in/austin-bagnall</span></a></li>
-        <li><a href="Austin_Bagnall_Resume_2026.pdf" download><span class="contact-label">Resume</span><span class="contact-handle">Download PDF</span></a></li>
-      </ul>
+    <div class="block-body contact-body">
+      <div class="contact-main">
+        <p class="lead">Based in Newcastle, NSW. Find me on GitHub or LinkedIn, or download my resume.</p>
+        <p class="local-time"><time data-tz="Australia/Sydney"></time></p>
+        <ul class="contact">
+          <li class="contact-row">
+            <a data-cmd="mail" href="mailto:c3231244@uon.edu.au"><span class="contact-label">c3231244@uon.edu.au</span></a>
+            <button class="copy" type="button" data-copy="c3231244@uon.edu.au" aria-live="polite">copy</button>
+          </li>
+          <li class="contact-row"><a data-cmd="open" href="https://github.com/a-bagnall"><span class="contact-label">github.com/a-bagnall</span></a></li>
+          <li class="contact-row"><a data-cmd="open" href="https://www.linkedin.com/in/austin-bagnall/"><span class="contact-label">linkedin.com/in/austin-bagnall</span></a></li>
+          <li class="contact-row"><a data-cmd="open" href="Austin_Bagnall_Resume_2026.pdf" download><span class="contact-label">resume.pdf</span></a></li>
+        </ul>
+      </div>
+      <div class="contact-sigil" aria-hidden="true">Q</div>
     </div>
-    <div class="brace brace-close">}</div>
+    <div class="section-foot">
+      <div class="brace brace-close">}</div>
+      <blockquote class="quote">
+        <p>"You don't ever let go of the thread."</p>
+        <footer>William Stafford</footer>
+      </blockquote>
+    </div>
   </section>
 
 </main>
