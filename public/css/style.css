@@ -295,14 +295,34 @@ span.skill-icon { text-align: center; color: var(--accent); font-family: var(--f
 
 @media (max-width: 700px) {
   html { scroll-snap-type: none; }
-  #nav nav a { padding: 0 0.6rem; }
+  #nav { justify-content: center; font-size: 0.85rem; }
+  #nav nav { display: grid; grid-template-columns: repeat(3, auto); gap: 0.3rem 1.5rem; }
+  #nav nav a { padding: 0; border-left: 0; }
   #dots { right: 0.6rem; }
   .screen { padding-right: 2.5rem; }
   .block-body { padding-left: 0; }
-  .timeline { margin-inline: 2.5rem; }
-  .timeline-label { font-size: 1rem; }
-  .timeline-label, .timeline-dates { white-space: normal; text-align: center; max-width: 6.5rem; }
+  /* Vertical timeline: the axis runs down the left, nodes keep their proportional position along it. */
+  .timeline { width: 4px; height: 32rem; margin: 4rem 0 4rem 2rem; }
+  .timeline-year-start { top: auto; right: auto; bottom: 100%; left: 50%; margin: 0 0 2rem; transform: translateX(-50%); }
+  .timeline-year-end { top: 100%; left: 50%; margin: 2rem 0 0; transform: translateX(-50%); }
+  .timeline-node {
+    top: var(--pos);
+    left: 50%;
+    transform: translate(-20px, -50%);
+    display: grid;
+    grid-template-columns: 40px auto;
+    align-items: center;
+    column-gap: 0.9rem;
+  }
+  .timeline-dot { grid-row: 1 / span 2; margin-top: 0; }
+  .timeline-label { margin-top: 0; font-size: 1.1rem; white-space: normal; text-align: left; }
+  .timeline-dates { margin-top: 0; white-space: normal; text-align: left; }
   .about-body, .skills-panel, .work-roles { grid-template-columns: 1fr; }
+  .work-roles { gap: 1.5rem 0; }
+  .projects > li { grid-template-columns: 1fr; }
+  .projects .tags { grid-row: auto; grid-column: 1; }
+  .contact a { grid-template-columns: 1fr; gap: 0.2rem; }
+  .contact-handle { overflow-wrap: anywhere; }
   .about-photo { max-width: 20rem; justify-self: start; }
   .skill-col::before { display: none; }
 }
